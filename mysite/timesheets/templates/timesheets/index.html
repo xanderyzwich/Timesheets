@@ -1,0 +1,10 @@
+<div name="pagebox">
+    <h1>Timesheet Entry for Enterpise Support Team</h1>
+    <div name="formbox">
+        <form action="" method="post" float="left">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+</div>
