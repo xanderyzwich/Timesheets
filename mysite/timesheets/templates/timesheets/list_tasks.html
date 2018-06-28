@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>task Task List</title>
+    </head>
+    <body>
+        <h1>task Tasks</h1>
+        {% if task_list %}
+            {% for task in task_list %}
+                <p><a href="{% url 'timesheets:task' task.id %}">{{ task }}</a></p>
+            {% endfor %}
+        {% else %}
+            <p>No tasks are available.</p>
+        {% endif %}
+        {% include 'timesheets/footer.html' %}
+    </body>
+</html>

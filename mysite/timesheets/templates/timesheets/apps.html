@@ -1,9 +1,0 @@
-{% if app_list %}
-    <ul>
-    {% for app in app_list %}
-        <li><a href="{% url 'timesheets:app' app.id %}">{{ app }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No appss are available.</p>
-{% endif %}

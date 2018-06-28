@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Enterprise Support Employees</title>
+    </head>
+    <body>
+        <h1>Enterprise Support Employees</h1>
+        {% if employee_list %}
+            {% for employee in employee_list %}
+                <p><a href="{% url 'timesheets:employee' employee.id %}">{{ employee }}</a></p>
+            {% endfor %}
+        {% else %}
+            <p>No employees are available.</p>
+        {% endif %}
+        {% include 'timesheets/footer.html' %}
+    </body>
+</html>

@@ -5,7 +5,10 @@ import datetime
 
 # Create your models here.
 class Task(models.Model):
-    type = models.CharField(max_length=25)    # PK
+    type = models.CharField(max_length=25)
+
+    class Meta:
+        ordering = ('type',)
 
     def __str__(self):
         return self.type
@@ -16,6 +19,9 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
     created_date = models.DateField(default=datetime.date.today)
+
+    def name(self):
+        return self.first_name + ' ' + self.last_name
 
     def __str__(self):
         return str(self.id) + ' ' + str(self.first_name) + ' ' + str(self.last_name)
@@ -48,7 +54,7 @@ class Adhoc(models.Model):
     created_date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
-        return str(self.id) + ' ' + str(self.hours_projected) + ' ' + str(self.hours_actual) + ' ' + str(self.description)
+        return 'Adhoc Task: ' + str(self.id) + ' ' + str(self.description)
 
 
 class Timesheet(models.Model):     # PK=EMP_ID,APP_ID,TASK_TYPE,DEFECT_ID,ADHOC_ID,TASK_DATE
@@ -60,6 +66,9 @@ class Timesheet(models.Model):     # PK=EMP_ID,APP_ID,TASK_TYPE,DEFECT_ID,ADHOC_
     date = models.DateField(default=datetime.date.today)
     hours = models.DecimalField(decimal_places=2,max_digits=4)
 
+    class Meta:
+        ordering = ('-date', 'emp__id', 'app__id', 'task__type', 'defect__id', 'adhoc__id')
+
     def __str__(self):
         return str('Employee: ' + str(self.emp) + ' App: ' + str(self.app) + ' Task: ' + str(self.task) + ' Defect: '
                    + str(self.defect) + ' Adhoc: ' + str(self.adhoc))
@@ -69,3 +78,4 @@ class TimesheetForm(ModelForm):
     class Meta:
         model = Timesheet
         fields = ['emp', 'app', 'task', 'defect', 'adhoc', 'date', 'hours']
+

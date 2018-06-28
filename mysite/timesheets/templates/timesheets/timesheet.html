@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ object }}</title>
+    </head>
+    <body>
+        <h1>{{ object }}</h1>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Hours</th>
+                <th>App</th>
+                <th>Emp ID</th>
+                <th>Emp Name</th>
+                <th>Task ID</th>
+                <th>Task Description</th>
+            </tr>
+            {% for timesheet in timesheet_list %}
+                <tr>
+                    <td>{{ timesheet.date }}</td>
+                    <td>{{ timesheet.hours }}</td>
+                    <td>{{ timesheet.app.id }}</td>
+                    <td>{{ timesheet.emp.id }}</td>
+                    <td>{{ timesheet.emp.name }}</td>
+                    {% if timesheet.task.type == 'Defect' %}
+                        <td>{{ timesheet.defect.id }}</td>
+                        <td>{{ timesheet.defect.description }}</td>
+                    {% elif timesheet.task.type == 'Adhoc' %}
+                        <td>{{ timesheet.adhoc.id }}</td>
+                        <td>{{ timesheet.adhoc.description }}</td>
+                    {% else %}
+                        <td>{{ timesheet.task.type }}</td>
+                        <td></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+        {% include 'timesheets/footer.html' %}
+    </body>
+</html>

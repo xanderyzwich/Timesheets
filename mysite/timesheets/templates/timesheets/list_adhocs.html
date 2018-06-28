@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Adhoc Task List</title>
+    </head>
+    <body>
+        <h1>Adhoc Tasks</h1>
+            {% if adhoc_list %}
+                {% for adhoc in adhoc_list %}
+                    <p><a href="{% url 'timesheets:adhoc' adhoc.id %}">{{ adhoc }}</a></p>
+                {% endfor %}
+            {% else %}
+                <p>No adhocs are available.</p>
+            {% endif %}
+        {% include 'timesheets/footer.html' %}
+    </body>
+</html>

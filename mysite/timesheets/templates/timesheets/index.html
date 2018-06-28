@@ -1,10 +1,22 @@
-<div name="pagebox">
-    <h1>Timesheet Entry for Enterpise Support Team</h1>
-    <div name="formbox">
-        <form action="" method="post" float="left">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit" />
-        </form>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Enterprise Support Timesheet Entry</title>
+    </head>
+    <body>
+        <div name="pagebox">
+            <h1>Timesheet Entry for Enterpise Support Team</h1>
+            <br>
+            <div name="formbox">
+                <form action="" method="post" float="left">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit" />
+                </form>
+                <br>
+            </div>
+            {% include 'timesheets/footer.html' %}
+        </div>
+    </body>
+</html>
