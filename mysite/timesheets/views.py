@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template import loader
 import datetime
+import calendar
 
 from .models import Task, Employee, App, Defect, Adhoc, Timesheet, TimesheetForm
 
@@ -29,11 +30,11 @@ def report(request, year=0, month=0, day=0):
                 time_string = str(year)
         else:
             timesheet_list = Timesheet.objects.filter(date__month=month, date__year=year)
-            time_string = str(year) + str(month)
+            time_string = calendar.month_name[month] + ' ' + str(year)
 
     else:
         timesheet_list = Timesheet.objects.filter(date__month=month, date__year=year, date__day=day)
-        time_string = str(year) + str(month) + str(day)
+        time_string = str(day) + ' ' + calendar.month_name[month] + ' ' + str(year)
 
     return render(request, 'timesheets/timesheet.html', {'object': 'Timesheet report for ' + time_string,
                                                           'timesheet_list': timesheet_list})
