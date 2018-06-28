@@ -126,5 +126,5 @@ def tasks(request):
 def task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year, emp__id=task_id)
+    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year, task__id=task_id)
     return render(request, 'timesheets/timesheet.html', {'object': task, 'timesheet_list': timesheet_list})
