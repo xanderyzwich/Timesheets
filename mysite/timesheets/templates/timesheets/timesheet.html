@@ -3,39 +3,49 @@
     <head>
         <meta charset="UTF-8">
         <title>{{ object }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <h1>{{ object }}</h1>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Hours</th>
-                <th>App</th>
-                <th>Emp ID</th>
-                <th>Emp Name</th>
-                <th>Task ID</th>
-                <th>Task Description</th>
-            </tr>
-            {% for timesheet in timesheet_list %}
-                <tr>
-                    <td>{{ timesheet.date }}</td>
-                    <td>{{ timesheet.hours }}</td>
-                    <td>{{ timesheet.app.id }}</td>
-                    <td>{{ timesheet.emp.id }}</td>
-                    <td>{{ timesheet.emp.name }}</td>
-                    {% if timesheet.task.type == 'Defect' %}
-                        <td>{{ timesheet.defect.id }}</td>
-                        <td>{{ timesheet.defect.description }}</td>
-                    {% elif timesheet.task.type == 'Adhoc' %}
-                        <td>{{ timesheet.adhoc.id }}</td>
-                        <td>{{ timesheet.adhoc.description }}</td>
-                    {% else %}
-                        <td>{{ timesheet.task.type }}</td>
-                        <td></td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        </table>
-        {% include 'timesheets/footer.html' %}
+        <div class="container-fluid" name="title-box">
+            <div class="container">
+                <h1>{{ object }}</h1>
+            </div>
+        </div>
+        <div class="container-fluid" name="body-box">
+            <div class="container">
+                <div class="row" name="heading">
+                    <div class="col-sm-2">Date</div>
+                    <div class="col-sm-1">Hours</div>
+                    <div class="col-sm-1">App</div>
+                    <div class="col-sm-1">Emp ID</div>
+                    <div class="col-sm-2">Emp Name</div>
+                    <div class="col-sm-2">Task ID</div>
+                    <div class="col-sm-2">Task Description</div>
+                </div>
+                {% for timesheet in timesheet_list %}
+                    <div class="row" name="data">
+                        <div class="col-sm-2">{{ timesheet.date }}</div>
+                        <div class="col-sm-1">{{ timesheet.hours }}</div>
+                        <div class="col-sm-1">{{ timesheet.app.id }}</div>
+                        <div class="col-sm-1">{{ timesheet.emp.id }}</div>
+                        <div class="col-sm-2">{{ timesheet.emp.name }}</div>
+                        {% if timesheet.task.type == 'Defect' %}
+                            <div class="col-sm-2">{{ timesheet.defect.id }}</div>
+                            <div class="col-sm-2">{{ timesheet.defect.description }}</div>
+                        {% elif timesheet.task.type == 'Adhoc' %}
+                            <div class="col-sm-2">{{ timesheet.adhoc.id }}</div>
+                            <div class="col-sm-2">{{ timesheet.adhoc.description }}</div>
+                        {% else %}
+                            <div class="col-sm-2">{{ timesheet.task.type }}</div>
+                            <div class="col-sm-2"> </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% include 'timesheets/footer.html' %}</div>
     </body>
 </html>

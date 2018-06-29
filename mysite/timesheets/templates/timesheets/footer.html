@@ -1,11 +1,30 @@
-<div name="footerbox">
-    <br>
-    <h2>Links</h2>
-    <p><a href="{% url 'timesheets:index' %}">  Timesheet Entry  </a></p>
-    <p><a href="{% url 'timesheets:report' %}">  Current Month Report  </a></p>
-    <p><a href="{% url 'timesheets:adhocs' %}">  Adhoc Task List  </a></p>
-    <p><a href="{% url 'timesheets:apps' %}">  App List  </a></p>
-    <p><a href="{% url 'timesheets:employees' %}">  Employee List  </a></p>
-    <p><a href="{% url 'timesheets:defects' %}">  Defect List  </a></p>
-    <p><a href="{% url 'timesheets:tasks' %}">  Task List  </a></p>
+<div class="container-fluid" name="footer-box">
+    <div class="container">
+        <h2>Links</h2>
+    </div>
+    <div class="container" name="links">
+        <div class="row">
+            <div class="col-sm-1">
+                <a href="{% url 'timesheets:index' %}">Time Entry</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="{% url 'timesheets:report' %}">This Month</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="{% url 'timesheets:adhocs' %}">Adhoc</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="{% url 'timesheets:apps' %}">Apps</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="{% url 'timesheets:employees' %}">Employees</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="{% url 'timesheets:defects' %}">Defects</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="{% url 'timesheets:tasks' %}">Tasks</a>
+            </div>
+        </div>
+    </div>
 </div>

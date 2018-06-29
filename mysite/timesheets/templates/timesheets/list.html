@@ -3,16 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <title>{{ title }}</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     </head>
     <body>
-        <h1>{{ title }}</h1>
-            {% if object_list %}
-                {% for object in object_list %}
-                    <p><a href= {{ object_url }} >{{ object }}</a></p>
-                {% endfor %}
-            {% else %}
-                <p>No adhocs are available.</p>
-            {% endif %}
+        <div class="container-fluid" name="title-box">
+            <div class="container">
+                <h1>{{ title }}</h1>
+            </div>
+        </div>
+        <div class="container-fluid" name="body-box">
+            <div class="container">
+                {% if object_list %}
+                    {% for object in object_list %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="/timesheet/{{object_model}}/{{ object.id }}/">{{ object }}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    No items are available are available.
+                {% endif %}
+            </div>
+        </div>
         {% include 'timesheets/footer.html' %}
     </body>
 </html>

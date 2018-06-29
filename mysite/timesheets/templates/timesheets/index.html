@@ -2,21 +2,41 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Enterprise Support Timesheet Entry</title>
-    </head>
+        <title>Time Entry</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+   </head>
     <body>
-        <div name="pagebox">
-            <h1>Timesheet Entry for Enterpise Support Team</h1>
-            <br>
-            <div name="formbox">
-                <form action="" method="post" float="left">
+        <div class="container-fluid" name="title-box">
+            <div class="container">
+                <h1>Time Entry</h1>
+            </div>
+        </div>
+        <div class="container-fluid" name="body-box">
+            <div class="container" title="form">
+                <form action="" method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type="submit" value="Submit" />
+                    <!--{{ form.as_p }}-->
+                    {% for field in form %}
+                        <div class="row">
+                            <div class="col-sm-1" name="label">
+                                {{ field.label_tag }}
+                            </div>
+                            <div class="col-sm-5" name="input">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col-sm-1"> </div>
+                        <div class="col-sm-1">
+                            <input type="submit" value="Submit" />
+                        </div>
+                    </div>
                 </form>
                 <br>
             </div>
-            {% include 'timesheets/footer.html' %}
         </div>
+        {% include 'timesheets/footer.html' %}
     </body>
 </html>
