@@ -52,7 +52,7 @@ def adhocs(request):
     context = {
         'object_list': adhoc_list,
         'title': 'Adhoc Tasks',
-        'object_url': '{% url "timesheets:adhoc" adhoc.id %}',
+        'object_model': 'adhoc',
     }
     return HttpResponse(template.render(context, request))
 
@@ -72,7 +72,7 @@ def apps(request):
     context = {
         'object_list': app_list,
         'title': 'Supported Apps',
-        'object_url': '{% url "timesheets:app" app.id %}',
+        'object_model': 'app',
     }
     return HttpResponse(template.render(context, request))
 
@@ -91,7 +91,7 @@ def defects(request):
     context = {
         'object_list': defect_list,
         'title': 'Supported Defects',
-        'object_url': '{% url "timesheets:defect" defect.id %}',
+        'object_model': 'defect',
     }
     return HttpResponse(template.render(context, request))
 
@@ -111,7 +111,7 @@ def employees(request):
     context = {
         'object_list': employee_list,
         'title': 'Support Employees',
-        'object_url': '{% url "timesheets:employee" employee.id %}',
+        'object_model': 'employee',
     }
     return HttpResponse(template.render(context, request))
 
@@ -130,7 +130,7 @@ def tasks(request):
     context = {
         'object_list': task_list,
         'title': 'Support Tasks',
-        'object_url': '{% url "timesheets:task" task.id %}',
+        'object_url': 'task',
     }
     return HttpResponse(template.render(context, request))
 
