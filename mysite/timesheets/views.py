@@ -1,10 +1,12 @@
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+import calendar
+import datetime
+
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.template import loader
-import datetime
-import calendar
 
 from .models import Task, Employee, App, Defect, Adhoc, Timesheet, TimesheetForm
+
 
 # Views not tied to a model
 def index(request):
@@ -40,16 +42,17 @@ def report(request, year=0, month=0, day=0):
                                                           'timesheet_list': timesheet_list})
 
 
-
 # Views tied to models
 # Listed alphabetically
 
 # Adhoc Model Views
 def adhocs(request):
     adhoc_list = Adhoc.objects.all()
-    template = loader.get_template('timesheets/list_adhocs.html')
+    template = loader.get_template('timesheets/list.html')
     context = {
-        'adhoc_list': adhoc_list,
+        'object_list': adhoc_list,
+        'title': 'Adhoc Tasks',
+        'object_url': '{% url "timesheets:adhoc" adhoc.id %}',
     }
     return HttpResponse(template.render(context, request))
 
@@ -65,9 +68,11 @@ def adhoc(request, adhoc_id):
 # App Model Views
 def apps(request):
     app_list = App.objects.all()
-    template = loader.get_template('timesheets/list_apps.html')
+    template = loader.get_template('timesheets/list.html')
     context = {
-        'app_list': app_list,
+        'object_list': app_list,
+        'title': 'Supported Apps',
+        'object_url': '{% url "timesheets:app" app.id %}',
     }
     return HttpResponse(template.render(context, request))
 
@@ -82,9 +87,11 @@ def app(request, app_id):
 # Defect Model Views
 def defects(request):
     defect_list = Defect.objects.all()
-    template = loader.get_template('timesheets/list_defects.html')
+    template = loader.get_template('timesheets/list.html')
     context = {
-        'defect_list': defect_list,
+        'object_list': defect_list,
+        'title': 'Supported Defects',
+        'object_url': '{% url "timesheets:defect" defect.id %}',
     }
     return HttpResponse(template.render(context, request))
 
@@ -100,9 +107,11 @@ def defect(request, defect_id):
 # Employee Model Views
 def employees(request):
     employee_list = Employee.objects.all()
-    template = loader.get_template('timesheets/list_employees.html')
+    template = loader.get_template('timesheets/list.html')
     context = {
-        'employee_list': employee_list,
+        'object_list': employee_list,
+        'title': 'Support Employees',
+        'object_url': '{% url "timesheets:employee" employee.id %}',
     }
     return HttpResponse(template.render(context, request))
 
@@ -117,9 +126,11 @@ def employee(request, employee_id):
 # Task Model Views
 def tasks(request):
     task_list = Task.objects.all()
-    template = loader.get_template('timesheets/list_tasks.html')
+    template = loader.get_template('timesheets/list.html')
     context = {
-        'task_list': task_list,
+        'object_list': task_list,
+        'title': 'Support Tasks',
+        'object_url': '{% url "timesheets:task" task.id %}',
     }
     return HttpResponse(template.render(context, request))
 
