@@ -1,3 +1,15 @@
 # Timesheets
+Depends on django and pytz
 
-Tracking time spent by team members on various applications is necessary for projecting cyclic usage. This application is designed to help my team to track efforts in regards to multiple applications, tasks, defects, and other adhoc recurring task styles.
+Timesheets is an internal team utility for tracking time spent on application support activities in an effort to better project and balance labor efforts.
+
+
+
+index.html allows for time sheet submission
+
+timesheet.html allows for reporting of timesheet entries
+
+list.html is used for listing entries for different models and link entry specific views
+
+entry specific views utilize timesheet.html and provide reporting specific to that entry
+
