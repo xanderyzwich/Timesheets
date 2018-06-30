@@ -130,7 +130,7 @@ def tasks(request):
     context = {
         'object_list': task_list,
         'title': 'Support Tasks',
-        'object_url': 'task',
+        'object_model': 'task',
     }
     return HttpResponse(template.render(context, request))
 
