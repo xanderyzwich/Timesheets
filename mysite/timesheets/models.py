@@ -1,6 +1,7 @@
+import datetime
+
 from django.db import models
 from django.forms import ModelForm
-import datetime
 
 
 # Create your models here.
@@ -71,7 +72,7 @@ class Timesheet(models.Model):     # PK=EMP_ID,APP_ID,TASK_TYPE,DEFECT_ID,ADHOC_
 
     def __str__(self):
         return str('Employee: ' + str(self.emp) + ' App: ' + str(self.app) + ' Task: ' + str(self.task) + ' Defect: '
-                   + str(self.defect) + ' Adhoc: ' + str(self.adhoc))
+                   + str(self.defect) + ' Adhoc: ' + str(self.adhoc) + ' Hours: ' + str(self.hours))
 
 
 class TimesheetForm(ModelForm):

@@ -15,7 +15,25 @@
             </div>
         </div>
         <div class="container-fluid" name="body-box">
-            <div class="container">
+            <div class="container" title="summary">
+                <h3>Summary</h3>
+                <div class="row" name="heading">
+                    <div class="col-sm-1">ID</div>
+                    <div class="col-sm-2">Name</div>
+                    <div class="col-sm-2">Hours</div>
+                </div>
+                {% for piece in data %}
+                    <div class="row" name="data">
+                        <div class="col-sm-1">{{ piece.emp__id }}</div>
+                        <div class="col-sm-1">{{ piece.emp__first_name }}</div>
+                        <div class="col-sm-1">{{ piece.emp__last_name }}</div>
+                        <div class="col-sm-2">{{ piece.sum }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+            <div class="container" title="main">
+                <h3>List</h3>
                 <div class="row" name="heading">
                     <div class="col-sm-2">Date</div>
                     <div class="col-sm-1">Hours</div>

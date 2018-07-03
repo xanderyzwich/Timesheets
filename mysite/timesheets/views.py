@@ -1,6 +1,7 @@
 import calendar
 import datetime
 
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.template import loader
@@ -38,8 +39,10 @@ def report(request, year=0, month=0, day=0):
         timesheet_list = Timesheet.objects.filter(date__month=month, date__year=year, date__day=day)
         time_string = str(day) + ' ' + calendar.month_name[month] + ' ' + str(year)
 
+    # details = timesheet_list.values('emp__id', 'emp__first_name', 'emp__last_name').annotate(sum=Sum('hours'))
     return render(request, 'timesheets/timesheet.html', {'object': 'Timesheet report for ' + time_string,
-                                                          'timesheet_list': timesheet_list})
+                                                         'data': summary(timesheet_list),
+                                                         'timesheet_list': timesheet_list})
 
 
 # Views tied to models
@@ -60,9 +63,10 @@ def adhocs(request):
 def adhoc(request, adhoc_id):
     adhoc = get_object_or_404(Adhoc, pk=adhoc_id)
     today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month,date__year=today_date.year,
+    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year,
                                               adhoc__id=adhoc_id)
-    return render(request, 'timesheets/timesheet.html', {'object': adhoc, 'timesheet_list': timesheet_list})
+    return render(request, 'timesheets/timesheet.html', {'object': adhoc, 'data': summary(timesheet_list),
+                                                         'timesheet_list': timesheet_list})
 
 
 # App Model Views
@@ -81,7 +85,8 @@ def app(request, app_id):
     app = get_object_or_404(App,pk=app_id)
     today_date = datetime.date.today()
     timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year, app__id=app_id)
-    return render(request, 'timesheets/timesheet.html', {'object': app, 'timesheet_list': timesheet_list})
+    return render(request, 'timesheets/timesheet.html', {'object': app, 'data': summary(timesheet_list),
+                                                         'timesheet_list': timesheet_list})
 
 
 # Defect Model Views
@@ -101,7 +106,8 @@ def defect(request, defect_id):
     today_date = datetime.date.today()
     timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year,
                                               defect__id=defect_id)
-    return render(request, 'timesheets/timesheet.html', {'object': defect, 'timesheet_list': timesheet_list})
+    return render(request, 'timesheets/timesheet.html',
+                  {'object': defect, 'data': summary(timesheet_list), 'timesheet_list': timesheet_list})
 
 
 # Employee Model Views
@@ -119,8 +125,10 @@ def employees(request):
 def employee(request, employee_id):
     employee = get_object_or_404(Employee, pk=employee_id)
     today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year, emp__id=employee_id)
-    return render(request, 'timesheets/timesheet.html', {'object': employee, 'timesheet_list': timesheet_list})
+    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year,
+                                              emp__id=employee_id)
+    return render(request, 'timesheets/timesheet.html',
+                  {'object': employee, 'data': summary(timesheet_list), 'timesheet_list': timesheet_list})
 
 
 # Task Model Views
@@ -139,4 +147,8 @@ def task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     today_date = datetime.date.today()
     timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year, task__id=task_id)
-    return render(request, 'timesheets/timesheet.html', {'object': task, 'timesheet_list': timesheet_list})
+    return render(request, 'timesheets/timesheet.html', {'object': task, 'data': summary(timesheet_list), 'timesheet_list': timesheet_list})
+
+
+def summary(result_set):
+    return result_set.values('emp__id', 'emp__first_name', 'emp__last_name').order_by().annotate(sum=Sum('hours'))
