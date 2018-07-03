@@ -5,7 +5,10 @@ from . import views
 app_name = 'timesheets'
 urlpatterns = [
     # index page
+    # time entered here
     path('', views.index, name='index'),
+
+    # report pages
     path('report/', views.report, name='report'),
     path('report/<int:year>/', views.report, name='report'),
     path('report/<int:year>/<int:month>/', views.report, name='report'),
@@ -13,7 +16,6 @@ urlpatterns = [
 
     # Adhoc Model Pages
     path('adhocs/', views.adhocs, name='adhocs'),  # list of adhocs
-    path('adhoc/', views.adhocs, name='adhocs'),   # alternate url in case adhoc id is removed from specific page
     path('adhoc/<int:adhoc_id>/', views.adhoc, name='adhoc'),
     path('adhoc/<int:adhoc_id>/<int:year>/', views.adhoc, name='adhoc'),
     path('adhoc/<int:adhoc_id>/<int:year>/<int:month>/', views.adhoc, name='adhoc'),

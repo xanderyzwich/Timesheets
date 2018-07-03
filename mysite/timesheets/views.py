@@ -16,9 +16,7 @@ def index(request):
         form = TimesheetForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'timesheets/index.html', {'form': TimesheetForm()})
-    else:
-        return render(request, 'timesheets/index.html', {'form': TimesheetForm()})
+    return render(request, 'timesheets/index.html', {'form': TimesheetForm()})
 
 
 def report(request, year=0, month=0, day=0):
