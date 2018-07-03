@@ -22,27 +22,9 @@ def index(request):
 
 
 def report(request, year=0, month=0, day=0):
-    today = datetime.date.today()
-    if day == 0:
-        if month == 0:
-            if year == 0:
-                timesheet_list = Timesheet.objects.filter(date__month=today.month, date__year=today.year)
-                time_string = "this month"
-            else:
-                timesheet_list = Timesheet.objects.filter(date__year=year)
-                time_string = str(year)
-        else:
-            timesheet_list = Timesheet.objects.filter(date__month=month, date__year=year)
-            time_string = calendar.month_name[month] + ' ' + str(year)
-
-    else:
-        timesheet_list = Timesheet.objects.filter(date__month=month, date__year=year, date__day=day)
-        time_string = str(day) + ' ' + calendar.month_name[month] + ' ' + str(year)
-
-    # details = timesheet_list.values('emp__id', 'emp__first_name', 'emp__last_name').annotate(sum=Sum('hours'))
-    return render(request, 'timesheets/timesheet.html', {'object': 'Timesheet report for ' + time_string,
-                                                         'data': summary(timesheet_list),
-                                                         'timesheet_list': timesheet_list})
+    limited = time_limit(Timesheet.objects.all(), year, month, day)
+    return render(request, 'timesheets/timesheet.html',
+                  {'object': 'Timesheet', 'report': limited[1], 'data': summary(limited[0]), 'timesheet_list': limited[0]})
 
 
 # Views tied to models
@@ -60,13 +42,11 @@ def adhocs(request):
     return HttpResponse(template.render(context, request))
 
 
-def adhoc(request, adhoc_id):
+def adhoc(request, adhoc_id, year=0, month=0, day=0):
     adhoc = get_object_or_404(Adhoc, pk=adhoc_id)
-    today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year,
-                                              adhoc__id=adhoc_id)
-    return render(request, 'timesheets/timesheet.html', {'object': adhoc, 'data': summary(timesheet_list),
-                                                         'timesheet_list': timesheet_list})
+    limited = time_limit(Timesheet.objects.filter(adhoc__id=adhoc_id), year, month, day)
+    return render(request, 'timesheets/timesheet.html',
+                  {'object': adhoc, 'report': limited[1], 'data': summary(limited[0]), 'timesheet_list': limited[0]})
 
 
 # App Model Views
@@ -81,12 +61,11 @@ def apps(request):
     return HttpResponse(template.render(context, request))
 
 
-def app(request, app_id):
+def app(request, app_id, year=0, month=0, day=0):
     app = get_object_or_404(App,pk=app_id)
-    today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year, app__id=app_id)
-    return render(request, 'timesheets/timesheet.html', {'object': app, 'data': summary(timesheet_list),
-                                                         'timesheet_list': timesheet_list})
+    limited = time_limit(Timesheet.objects.filter(app__id=app_id), year, month, day)
+    return render(request, 'timesheets/timesheet.html',
+                  {'object': app, 'report': limited[1], 'data': summary(limited[0]), 'timesheet_list': limited[0]})
 
 
 # Defect Model Views
@@ -101,13 +80,11 @@ def defects(request):
     return HttpResponse(template.render(context, request))
 
 
-def defect(request, defect_id):
+def defect(request, defect_id, year=0, month=0, day=0):
     defect = get_object_or_404(Defect, pk=defect_id)
-    today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year,
-                                              defect__id=defect_id)
+    limited = time_limit(Timesheet.objects.filter(defect__id=defect_id), year, month, day)
     return render(request, 'timesheets/timesheet.html',
-                  {'object': defect, 'data': summary(timesheet_list), 'timesheet_list': timesheet_list})
+                  {'object': defect, 'report': limited[1], 'data': summary(limited[0]), 'timesheet_list': limited[0]})
 
 
 # Employee Model Views
@@ -122,13 +99,11 @@ def employees(request):
     return HttpResponse(template.render(context, request))
 
 
-def employee(request, employee_id):
+def employee(request, employee_id, year=0, month=0, day=0):
     employee = get_object_or_404(Employee, pk=employee_id)
-    today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year,
-                                              emp__id=employee_id)
+    limited = time_limit(Timesheet.objects.filter(emp__id=employee_id), year, month, day)
     return render(request, 'timesheets/timesheet.html',
-                  {'object': employee, 'data': summary(timesheet_list), 'timesheet_list': timesheet_list})
+                  {'object': employee, 'report': limited[1], 'data': summary(limited[0]), 'timesheet_list': limited[0]})
 
 
 # Task Model Views
@@ -143,12 +118,35 @@ def tasks(request):
     return HttpResponse(template.render(context, request))
 
 
-def task(request, task_id):
+def task(request, task_id, year=0, month=0, day=0):
     task = get_object_or_404(Task, pk=task_id)
-    today_date = datetime.date.today()
-    timesheet_list = Timesheet.objects.filter(date__month=today_date.month, date__year=today_date.year, task__id=task_id)
-    return render(request, 'timesheets/timesheet.html', {'object': task, 'data': summary(timesheet_list), 'timesheet_list': timesheet_list})
+    limited = time_limit(Timesheet.objects.filter(task__id=task_id), year, month, day)
+    return render(request, 'timesheets/timesheet.html',
+                  {'object': task, 'report': limited[1], 'data': summary(limited[0]), 'timesheet_list': limited[0]})
 
 
+# Summarize the result_set by employee
 def summary(result_set):
     return result_set.values('emp__id', 'emp__first_name', 'emp__last_name').order_by().annotate(sum=Sum('hours'))
+
+
+# filter the result_set by year, month, and day as requested
+def time_limit(result_set, year, month, day):
+    today = datetime.date.today()
+    time_string = ' report for '
+    if day == 0:
+        if month == 0:
+            if year == 0:
+                timesheet_list = result_set.filter(date__month=today.month, date__year=today.year)
+                time_string += "this month"
+            else:
+                timesheet_list = result_set.filter(date__year=year)
+                time_string += str(year)
+        else:
+            timesheet_list = result_set.filter(date__month=month, date__year=year)
+            time_string += calendar.month_name[month] + ' ' + str(year)
+
+    else:
+        timesheet_list = result_set.filter(date__month=month, date__year=year, date__day=day)
+        time_string += str(day) + ' ' + calendar.month_name[month] + ' ' + str(year)
+    return timesheet_list, time_string

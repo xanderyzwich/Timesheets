@@ -51,11 +51,13 @@ class Adhoc(models.Model):
     id = models.IntegerField(primary_key=True)
     description = models.CharField(max_length=50)
     hours_projected = models.IntegerField(default=0)
-    hours_actual = models.IntegerField()
     created_date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
-        return 'Adhoc Task: ' + str(self.id) + ' ' + str(self.description)
+        output = 'Adhoc Task: ' + str(self.id) + ' - ' + str(self.description)
+        if int(self.hours_projected) > 0:
+            output += ' (' + str(self.hours_projected) + ' hours projected)'
+        return output
 
 
 class Timesheet(models.Model):     # PK=EMP_ID,APP_ID,TASK_TYPE,DEFECT_ID,ADHOC_ID,TASK_DATE
