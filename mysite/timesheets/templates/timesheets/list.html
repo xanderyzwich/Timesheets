@@ -12,6 +12,7 @@
                 <h1>{{ title }}</h1>
             </div>
         </div>
+        {% include 'timesheets/navbar.html' %}
         <div class="container-fluid" name="body-box">
             <div class="container">
                 {% if object_list %}
@@ -27,6 +28,5 @@
                 {% endif %}
             </div>
         </div>
-        {% include 'timesheets/footer.html' %}
     </body>
 </html>
