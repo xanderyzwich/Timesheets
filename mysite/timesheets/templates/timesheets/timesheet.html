@@ -52,10 +52,10 @@
                         <div class="col-sm-1">{{ timesheet.app.id }}</div>
                         <div class="col-sm-1">{{ timesheet.emp.id }}</div>
                         <div class="col-sm-2">{{ timesheet.emp.name }}</div>
-                        {% if timesheet.task.type == 'Defect' %}
+                        {% if timesheet.defect is not None %}
                             <div class="col-sm-2">{{ timesheet.defect.id }}</div>
                             <div class="col-sm-2">{{ timesheet.defect.description }}</div>
-                        {% elif timesheet.task.type == 'Adhoc' %}
+                        {% elif timesheet.adhoc is not None %}
                             <div class="col-sm-2">{{ timesheet.adhoc.id }}</div>
                             <div class="col-sm-2">{{ timesheet.adhoc.description }}</div>
                         {% else %}
