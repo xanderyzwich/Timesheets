@@ -15,34 +15,31 @@
         {% include 'timesheets/navbar.html' %}
         <div class="container-fluid" name="body-box">
             <div class="container" title="form">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <!--{{ form.as_p }}-->
-                    {% for field in form %}
-                        <div class="row">
-                            <div class="col-sm-1" name="label">
-                                {{ field.label_tag }}
+                <form class="form-horizontal" method="post">{% csrf_token %}
+                    <fieldset>
+                        <legend>{{ title }}</legend>
+                        {% for field in form %}
+                            <div class="control-group row">
+                                <label class="control-label col-sm-1">{{ field.label }}</label>
+                                <div class="controls col-sm-5">{{ field }}</div>
                             </div>
-                            <div class="col-sm-5" name="input">
-                                {{ field }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% if form.errors %}
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="alert alert-info" title="error">{{ form.non_field_errors }}</div>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="row">
-                        <div class="col-sm-1"> </div>
-                        <div class="col-sm-1">
-                            <input type="submit" value="Submit" />
+                        {% endfor %}
+                    </fieldset>
+                        {% if form.non_field_errors %}
+                            {% for error in  form.non_field_errors %}
+                                <div class="error row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-5 alert alert-warning">{{ error }}</div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    <div class="form-actions row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary" >Submit</button>
                         </div>
                     </div>
                 </form>
-                <br>
             </div>
         </div>
     </body>
