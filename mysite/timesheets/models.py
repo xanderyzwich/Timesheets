@@ -3,7 +3,7 @@
 import datetime
 
 from django.db import models
-from django.forms import ModelForm
+from django.forms import ModelForm, ValidationError
 
 
 # Create your models here.
@@ -96,4 +96,22 @@ class TimesheetForm(ModelForm):
     class Meta:
         model = Timesheet
         fields = ['emp', 'app', 'task', 'defect', 'adhoc', 'date', 'hours']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        task = cleaned_data.get('task')
+        adhoc = cleaned_data.get('adhoc')
+        defect = cleaned_data.get('defect')
+
+        if task.type == 'Adhoc' and adhoc is None:
+            self.fields['adhoc'].required = True
+            raise ValidationError("Adhoc item is required")
+        elif task.type == 'Defect' and defect is None:
+            self.fields['defect'].required = True
+            raise ValidationError("Defect item is required")
+        elif adhoc is not None and task.type != 'Adhoc':
+            raise ValidationError("Adhoc requires matching Task")
+        elif defect is not None and task.type != 'Defect':
+            raise ValidationError("Defect requires matching Task")
+        return cleaned_data
 
