@@ -44,11 +44,19 @@ def adhocs(request):
     """List of all adhoc task entries"""
 
     adhoc_list = Adhoc.objects.all()
+    data_list = list()
+    for item in adhoc_list:
+        hours = Timesheet.objects.filter(adhoc__id=item.id).aggregate(sum=Sum('hours')).get('sum')
+        if hours is None:
+            hours = 0
+        if int(item.hours_projected) > 0:
+            item.description += ' - ' + str(item.hours_projected) + ' hours'
+        data_list.append(ListItem(item.id, item.description, hours))
     template = loader.get_template('timesheets/list.html')
     context = {
-        'object_list': adhoc_list,
+        'object_list': data_list,
         'title': 'Adhoc Tasks',
-        'object_model': 'adhoc',
+        'object_model': 'adhoc'
     }
     return HttpResponse(template.render(context, request))
 
@@ -74,9 +82,15 @@ def apps(request):
     """List of all app entries"""
 
     app_list = App.objects.all()
+    data_list = list()
+    for item in app_list:
+        hours = Timesheet.objects.filter(app__id=item.id).aggregate(sum=Sum('hours')).get('sum')
+        if hours is None:
+            hours = str(0)
+        data_list.append(ListItem(item.id, str(item.name), hours))
     template = loader.get_template('timesheets/list.html')
     context = {
-        'object_list': app_list,
+        'object_list': data_list,
         'title': 'Supported Apps',
         'object_model': 'app',
     }
@@ -104,9 +118,15 @@ def defects(request):
     """List of all defect entries"""
 
     defect_list = Defect.objects.all()
+    data_list = list()
+    for item in defect_list:
+        hours = Timesheet.objects.filter(defect__id=item.id).aggregate(sum=Sum('hours')).get('sum')
+        if hours is None:
+            hours = str(0)
+        data_list.append(ListItem(item.id, str(item.app) + ': ' + str(item.description), hours))
     template = loader.get_template('timesheets/list.html')
     context = {
-        'object_list': defect_list,
+        'object_list': data_list,
         'title': 'Supported Defects',
         'object_model': 'defect',
     }
@@ -134,9 +154,15 @@ def employees(request):
     """List of all support employees"""
 
     employee_list = Employee.objects.all()
+    data_list = list()
+    for item in employee_list:
+        hours = Timesheet.objects.filter(emp__id=item.id).aggregate(sum=Sum('hours')).get('sum')
+        if hours is None:
+            hours = str(0)
+        data_list.append(ListItem(item.id, item.name(), hours))
     template = loader.get_template('timesheets/list.html')
     context = {
-        'object_list': employee_list,
+        'object_list': data_list,
         'title': 'Support Employees',
         'object_model': 'employee',
     }
@@ -164,9 +190,15 @@ def tasks(request):
     """List of all tasks (includes adhoc and defect collective data)"""
 
     task_list = Task.objects.all()
+    data_list = list()
+    for item in task_list:
+        hours = Timesheet.objects.filter(task__type=item.type).aggregate(sum=Sum('hours')).get('sum')
+        if hours is None:
+            hours = str(0)
+        data_list.append(ListItem(item.type, ' ', hours))
     template = loader.get_template('timesheets/list.html')
     context = {
-        'object_list': task_list,
+        'object_list': data_list,
         'title': 'Support Tasks',
         'object_model': 'task',
     }
@@ -218,3 +250,9 @@ def time_limit(year, month, day):
         timesheet_list = Timesheet.objects.filter(date__month=month, date__year=year, date__day=day)
         time_string += str(day) + ' ' + calendar.month_name[month] + ' ' + str(year)
     return timesheet_list, time_string
+
+class ListItem:
+    def __init__(self, id, description, total):
+        self.id = id
+        self.description = description
+        self.total = total

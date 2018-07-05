@@ -16,11 +16,22 @@
         <div class="container-fluid" name="body-box">
             <div class="container">
                 {% if object_list %}
+                    <div class="row">
+                        <h4>
+                            <div class="col-sm-3">{{ object_model|title }} ID</div>
+                            <div class="col-sm-5">{{ object_model|title }} Name</div>
+                            <div class="col-sm-2">Total Hours</div>
+                        </h4>
+                    </div>
                     {% for object in object_list %}
                         <div class="row">
-                            <div class="col-sm-12">
-                                <h4><a href="/timesheet/{{object_model}}/{{ object.id }}/">{{ object }}</a></h4>
-                            </div>
+                            <a href="/timesheet/{{object_model}}/{{ object.id }}/">
+                            <h4>
+                                <div class="col-sm-3">{{ object.id }}</div>
+                                <div class="col-sm-5">{{ object.description }}</div>
+                                <div class="col-sm-2">{{ object.total }}</div>
+                            </h4>
+                            </a>
                         </div>
                     {% endfor %}
                 {% else %}
