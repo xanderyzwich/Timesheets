@@ -195,7 +195,7 @@ def tasks(request):
         hours = Timesheet.objects.filter(task__type=item.type).aggregate(sum=Sum('hours')).get('sum')
         if hours is None:
             hours = str(0)
-        data_list.append(ListItem(item.type, ' ', hours))
+        data_list.append(ListItem(item.id, item.type, hours))
     template = loader.get_template('timesheets/list.html')
     context = {
         'object_list': data_list,
