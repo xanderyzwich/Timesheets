@@ -26,8 +26,14 @@ def report(request, year=None, month=None, day=None):
     """Used to generate report of all labor in a given year, month or day"""
 
     limited, time_string = time_limit(year, month, day)
-    return render(request, 'timesheets/timesheet.html',
-                  {'object': 'Timesheet', 'report': time_string, 'data': summary(limited), 'timesheet_list': limited})
+    context = {
+        'object': 'Timesheet',
+        'report': time_string,
+        'data': summary(limited),
+        'timesheet_list': limited,
+        'total': limited.aggregate(Sum('hours'))
+    }
+    return render(request, 'timesheets/timesheet.html', context)
 
 
 # Views tied to models
@@ -53,8 +59,14 @@ def adhoc(request, adhoc_id, year=None, month=None, day=None):
     adhoc = get_object_or_404(Adhoc, pk=adhoc_id)
     limited, time_string = time_limit(year, month, day)
     limited = limited.filter(adhoc__id=adhoc_id)
-    return render(request, 'timesheets/timesheet.html',
-                  {'object': adhoc, 'report': time_string, 'data': summary(limited), 'timesheet_list': limited})
+    context = {
+        'object': adhoc,
+        'report': time_string,
+        'data': summary(limited),
+        'timesheet_list': limited,
+        'total': limited.aggregate(Sum('hours'))
+    }
+    return render(request, 'timesheets/timesheet.html', context)
 
 
 # App Model Views
@@ -77,8 +89,14 @@ def app(request, app_id, year=None, month=None, day=None):
     app = get_object_or_404(App,pk=app_id)
     limited, time_string = time_limit(year, month, day)
     limited = limited.filter(app__id=app_id)
-    return render(request, 'timesheets/timesheet.html',
-                  {'object': app, 'report': time_string, 'data': summary(limited), 'timesheet_list': limited})
+    context = {
+        'object': app,
+        'report': time_string,
+        'data': summary(limited),
+        'timesheet_list': limited,
+        'total': limited.aggregate(Sum('hours'))
+    }
+    return render(request, 'timesheets/timesheet.html', context)
 
 
 # Defect Model Views
@@ -101,8 +119,14 @@ def defect(request, defect_id, year=None, month=None, day=None):
     defect = get_object_or_404(Defect, pk=defect_id)
     limited, time_string = time_limit(year, month, day)
     limited = limited.filter(defect__id=defect_id)
-    return render(request, 'timesheets/timesheet.html',
-                  {'object': defect, 'report': time_string, 'data': summary(limited), 'timesheet_list': limited})
+    context = {
+        'object': defect,
+        'report': time_string,
+        'data': summary(limited),
+        'timesheet_list': limited,
+        'total': limited.aggregate(Sum('hours'))
+     }
+    return render(request, 'timesheets/timesheet.html', context)
 
 
 # Employee Model Views
@@ -125,8 +149,14 @@ def employee(request, employee_id, year=None, month=None, day=None):
     employee = get_object_or_404(Employee, pk=employee_id)
     limited, time_string = time_limit(year, month, day)
     limited = limited.filter(emp__id=employee_id)
-    return render(request, 'timesheets/timesheet.html',
-                  {'object': employee, 'report': time_string, 'data': summary(limited), 'timesheet_list': limited})
+    context = {
+        'object': employee,
+        'report': time_string,
+        'data': summary(limited),
+        'timesheet_list': limited,
+        'total': limited.aggregate(Sum('hours'))
+    }
+    return render(request, 'timesheets/timesheet.html', context)
 
 
 # Task Model Views
@@ -149,8 +179,14 @@ def task(request, task_id, year=None, month=None, day=None):
     task = get_object_or_404(Task, pk=task_id)
     limited, time_string = time_limit(year, month, day)
     limited = limited.filter(task__id=task_id)
-    return render(request, 'timesheets/timesheet.html',
-                  {'object': task, 'report': time_string, 'data': summary(limited), 'timesheet_list': limited})
+    context = {
+        'object': task,
+        'report': time_string,
+        'data': summary(limited),
+        'timesheet_list': limited,
+        'total': limited.aggregate(Sum('hours'))
+    }
+    return render(request, 'timesheets/timesheet.html', context)
 
 
 # Summarize the result_set by employee
