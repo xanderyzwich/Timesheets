@@ -1,3 +1,5 @@
+"""Dynamic URL's to for data access"""
+
 from django.urls import path
 
 from . import views

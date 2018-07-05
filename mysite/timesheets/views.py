@@ -1,3 +1,5 @@
+"""Django views for the Timesheet application"""
+
 import calendar
 import datetime
 
@@ -11,7 +13,8 @@ from .models import Task, Employee, App, Defect, Adhoc, Timesheet, TimesheetForm
 
 # Views not tied to a model
 def index(request):
-    # return HttpResponse("Hello, world. You're at the timesheet index.")
+    """Timesheet entry view utilizes Form defined in models.py"""
+
     if request.method == 'POST':
         form = TimesheetForm(request.POST)
         if form.is_valid():
@@ -20,6 +23,8 @@ def index(request):
 
 
 def report(request, year=0, month=0, day=0):
+    """Used to generate report of all labor in a given year, month or day"""
+
     limited = time_limit(Timesheet.objects.all(), year, month, day)
     return render(request, 'timesheets/timesheet.html',
                   {'object': 'Timesheet', 'report': limited[1], 'data': summary(limited[0]), 'timesheet_list': limited[0]})
@@ -30,6 +35,8 @@ def report(request, year=0, month=0, day=0):
 
 # Adhoc Model Views
 def adhocs(request):
+    """List of all adhoc task entries"""
+
     adhoc_list = Adhoc.objects.all()
     template = loader.get_template('timesheets/list.html')
     context = {
@@ -41,6 +48,8 @@ def adhocs(request):
 
 
 def adhoc(request, adhoc_id, year=0, month=0, day=0):
+    """Summary and data for a specific adhoc entry"""
+
     adhoc = get_object_or_404(Adhoc, pk=adhoc_id)
     limited = time_limit(Timesheet.objects.filter(adhoc__id=adhoc_id), year, month, day)
     return render(request, 'timesheets/timesheet.html',
@@ -49,6 +58,8 @@ def adhoc(request, adhoc_id, year=0, month=0, day=0):
 
 # App Model Views
 def apps(request):
+    """List of all app entries"""
+
     app_list = App.objects.all()
     template = loader.get_template('timesheets/list.html')
     context = {
@@ -60,6 +71,8 @@ def apps(request):
 
 
 def app(request, app_id, year=0, month=0, day=0):
+    """Summary and data for a specific app"""
+
     app = get_object_or_404(App,pk=app_id)
     limited = time_limit(Timesheet.objects.filter(app__id=app_id), year, month, day)
     return render(request, 'timesheets/timesheet.html',
@@ -68,6 +81,8 @@ def app(request, app_id, year=0, month=0, day=0):
 
 # Defect Model Views
 def defects(request):
+    """List of all defect entries"""
+
     defect_list = Defect.objects.all()
     template = loader.get_template('timesheets/list.html')
     context = {
@@ -79,6 +94,8 @@ def defects(request):
 
 
 def defect(request, defect_id, year=0, month=0, day=0):
+    """Summary and data for a specific defect"""
+
     defect = get_object_or_404(Defect, pk=defect_id)
     limited = time_limit(Timesheet.objects.filter(defect__id=defect_id), year, month, day)
     return render(request, 'timesheets/timesheet.html',
@@ -87,6 +104,8 @@ def defect(request, defect_id, year=0, month=0, day=0):
 
 # Employee Model Views
 def employees(request):
+    """List of all support employees"""
+
     employee_list = Employee.objects.all()
     template = loader.get_template('timesheets/list.html')
     context = {
@@ -98,6 +117,8 @@ def employees(request):
 
 
 def employee(request, employee_id, year=0, month=0, day=0):
+    """Summary and data for a specific employee"""
+
     employee = get_object_or_404(Employee, pk=employee_id)
     limited = time_limit(Timesheet.objects.filter(emp__id=employee_id), year, month, day)
     return render(request, 'timesheets/timesheet.html',
@@ -106,6 +127,8 @@ def employee(request, employee_id, year=0, month=0, day=0):
 
 # Task Model Views
 def tasks(request):
+    """List of all tasks (includes adhoc and defect collective data)"""
+
     task_list = Task.objects.all()
     template = loader.get_template('timesheets/list.html')
     context = {
@@ -117,6 +140,8 @@ def tasks(request):
 
 
 def task(request, task_id, year=0, month=0, day=0):
+    """Summary and data for a specific task (or the adhoc/defect collection)"""
+
     task = get_object_or_404(Task, pk=task_id)
     limited = time_limit(Timesheet.objects.filter(task__id=task_id), year, month, day)
     return render(request, 'timesheets/timesheet.html',
@@ -125,11 +150,15 @@ def task(request, task_id, year=0, month=0, day=0):
 
 # Summarize the result_set by employee
 def summary(result_set):
+    """Generate summary by employee from full data list"""
+
     return result_set.values('emp__id', 'emp__first_name', 'emp__last_name').order_by().annotate(sum=Sum('hours'))
 
 
 # filter the result_set by year, month, and day as requested
 def time_limit(result_set, year, month, day):
+    """Limit result_set to a given time period"""
+
     today = datetime.date.today()
     time_string = ' report for '
     if day == 0:

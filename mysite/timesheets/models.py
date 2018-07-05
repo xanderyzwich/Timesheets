@@ -1,3 +1,5 @@
+"""The database models and form based on the timesheet model"""
+
 import datetime
 
 from django.db import models
@@ -6,6 +8,8 @@ from django.forms import ModelForm
 
 # Create your models here.
 class Task(models.Model):
+    """Used to support Timesheet class"""
+
     type = models.CharField(max_length=25)
 
     class Meta:
@@ -16,6 +20,8 @@ class Task(models.Model):
 
 
 class Employee(models.Model):
+    """Used to support Timesheet class"""
+
     id = models.IntegerField(primary_key=True)  # PK
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
@@ -29,6 +35,8 @@ class Employee(models.Model):
 
 
 class App(models.Model):
+    """Used to support Timesheet class"""
+
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=25)
     created_date = models.DateField(default=datetime.date.today)
@@ -38,6 +46,8 @@ class App(models.Model):
 
 
 class Defect(models.Model):
+    """Used to support Timesheet class"""
+
     id = models.CharField(primary_key=True, max_length=25)
     app = models.ForeignKey(App, on_delete=models.PROTECT)
     description = models.CharField(max_length=50)
@@ -48,6 +58,8 @@ class Defect(models.Model):
 
 
 class Adhoc(models.Model):
+    """Used to support Timesheet class"""
+
     id = models.IntegerField(primary_key=True)
     description = models.CharField(max_length=50)
     hours_projected = models.IntegerField(default=0)
@@ -61,6 +73,8 @@ class Adhoc(models.Model):
 
 
 class Timesheet(models.Model):     # PK=EMP_ID,APP_ID,TASK_TYPE,DEFECT_ID,ADHOC_ID,TASK_DATE
+    """Primary class/table for this application"""
+
     emp = models.ForeignKey(Employee, on_delete=models.PROTECT)
     app = models.ForeignKey(App, on_delete=models.PROTECT)
     task = models.ForeignKey(Task, on_delete=models.PROTECT)
@@ -78,6 +92,7 @@ class Timesheet(models.Model):     # PK=EMP_ID,APP_ID,TASK_TYPE,DEFECT_ID,ADHOC_
 
 
 class TimesheetForm(ModelForm):
+    """Input form for Timesheet data entry by user"""
     class Meta:
         model = Timesheet
         fields = ['emp', 'app', 'task', 'defect', 'adhoc', 'date', 'hours']
